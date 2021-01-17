@@ -193,7 +193,7 @@ async function _announce_user_winnings() {
     await _wait_one_second()
     document.getElementById("user_cards_left").innerHTML = user_cards_left.length.toString()
     document.getElementById("user_cards_left").style.fontSize = ""
-    document.getElementById("user_cards_left").style.color = "black"
+    document.getElementById("user_cards_left").style.color = ""
 }
 
 async function _announce_opponent_winnings() {
