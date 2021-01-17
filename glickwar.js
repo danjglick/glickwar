@@ -56,6 +56,14 @@ function start_new_game() {
     document.getElementById("embarrassed_gif").hidden = true
 }
 
+function _deal_26_cards_to(player_deck) {
+    for (let i = 1; i < 11; i++) {
+        let card_index = Math.floor(Math.random() * game_deck.length)
+        player_deck.push(game_deck[card_index])
+        game_deck.splice(card_index, 1)
+    }
+}
+
 async function play_next_hand() {
     if (user_hand.length > 0) {
         _handle_hand_winner()
@@ -74,24 +82,6 @@ async function play_next_hand() {
     number_of_opponent_bets_this_round = 0
 }
 
-function bet_user_card() {
-    _play_user_card()
-    number_of_user_bets_this_round++
-    if (number_of_user_bets_this_round === 3) {
-        document.getElementById("bet_another_card_button").disabled = true
-    }
-    let penultimate_played_user_card = document.getElementsByClassName("played_user_card")[document.getElementsByClassName("played_user_card").length - 2]
-    penultimate_played_user_card.style.opacity = OPACITY_LEVEL_FOR_GREYED_OUT_CARD
-}
-
-function _deal_26_cards_to(player_deck) {
-    for (let i = 1; i < 11; i++) {
-        let card_index = Math.floor(Math.random() * game_deck.length)
-        player_deck.push(game_deck[card_index])
-        game_deck.splice(card_index, 1)
-    }
-}
-
 function _play_user_card() {
     if (user_cards_left.length > 0) {
         let user_card = user_cards_left.pop()
@@ -104,7 +94,7 @@ function _play_user_card() {
         document.getElementById("user_hand").appendChild(card_element)
         document.getElementById("user_cards_left").innerHTML = user_cards_left.length.toString()
         if (is_artificial_intelligence_on === true) {
-            _run_opponent_ai()
+            _run_artificial_intelligence()
         }
     }
 }
@@ -123,13 +113,14 @@ function _play_opponent_card() {
     }
 }
 
-async function _run_opponent_ai() {
-    for (let i = 0; i < 3; i++) {
-        if (number_of_opponent_bets_this_round < 3 && _get_last_played_value(user_hand) > _get_last_played_value(opponent_hand) && _get_last_played_value(user_hand) < 11) {
-            await new Promise(r => setTimeout(r, 1000))
-            _bet_opponent_card()
-        }
+function bet_user_card() {
+    _play_user_card()
+    number_of_user_bets_this_round++
+    if (number_of_user_bets_this_round === 3) {
+        document.getElementById("bet_another_card_button").disabled = true
     }
+    let penultimate_played_user_card = document.getElementsByClassName("played_user_card")[document.getElementsByClassName("played_user_card").length - 2]
+    penultimate_played_user_card.style.opacity = OPACITY_LEVEL_FOR_GREYED_OUT_CARD
 }
 
 function _bet_opponent_card() {
@@ -139,9 +130,18 @@ function _bet_opponent_card() {
     penultimate_played_opponent_card.style.opacity = OPACITY_LEVEL_FOR_GREYED_OUT_CARD
 }
 
-function _get_last_played_value(player_played_cards) {
-    let player_last_played_card = player_played_cards[player_played_cards.length - 1]
-    return parseInt(player_last_played_card.replace(player_last_played_card.charAt(player_last_played_card.length - 1), ""))
+async function _run_artificial_intelligence() {
+    for (let i = 0; i < 3; i++) {
+        if (number_of_opponent_bets_this_round < 3 && _get_last_played_value_by_hand(user_hand) > _get_last_played_value_by_hand(opponent_hand) && _get_last_played_value_by_hand(user_hand) < 11) {
+            await new Promise(r => setTimeout(r, 1000))
+            _bet_opponent_card()
+        }
+    }
+}
+
+function _get_last_played_value_by_hand(hand) {
+    let last_played_card_by_hand = hand[hand.length - 1]
+    return parseInt(last_played_card_by_hand.replace(last_played_card_by_hand.charAt(last_played_card_by_hand.length - 1), ""))
 }
 
 function _clear_played_cards() {
@@ -154,8 +154,8 @@ function _clear_played_cards() {
 }
 
 function _handle_hand_winner() {
-    let user_last_played_value = _get_last_played_value(user_hand)
-    let opponent_last_played_value = _get_last_played_value(opponent_hand)
+    let user_last_played_value = _get_last_played_value_by_hand(user_hand)
+    let opponent_last_played_value = _get_last_played_value_by_hand(opponent_hand)
     if (user_last_played_value > opponent_last_played_value) {
         for (let i = 0; i < user_hand.length; i++) {
             user_cards_left.unshift(user_hand[i])
@@ -163,7 +163,7 @@ function _handle_hand_winner() {
         for (let i = 0; i < opponent_hand.length; i++) {
             user_cards_left.unshift(opponent_hand[i])
         }
-        _emphasize_updated_user_cards_left();
+        _announce_user_winnings();
     } else if (user_last_played_value < opponent_last_played_value) {
         for (let i = 0; i < user_hand.length; i++) {
             opponent_cards_left.unshift(user_hand[i])
@@ -171,7 +171,7 @@ function _handle_hand_winner() {
         for (let i = 0; i < opponent_hand.length; i++) {
             opponent_cards_left.unshift(opponent_hand[i])
         }
-        _emphasize_updated_opponent_cards_left()
+        _announce_opponent_winnings()
     } else if (user_hand.length > 0) {
         for (let i = 0; i < user_hand.length; i++) {
             user_cards_left.unshift(user_hand[i])
@@ -182,7 +182,7 @@ function _handle_hand_winner() {
     }
 }
 
-async function _emphasize_updated_user_cards_left() {
+async function _announce_user_winnings() {
     document.getElementById("user_cards_left").innerHTML = `+${opponent_hand.length}`
     document.getElementById("user_cards_left").style.fontSize = "48"
     document.getElementById("user_cards_left").style.color = "green"
@@ -192,7 +192,7 @@ async function _emphasize_updated_user_cards_left() {
     document.getElementById("user_cards_left").style.color = "black"
 }
 
-async function _emphasize_updated_opponent_cards_left() {
+async function _announce_opponent_winnings() {
     document.getElementById("opponent_cards_left").innerHTML = `+${user_hand.length}`
     document.getElementById("opponent_cards_left").style.fontSize = "48"
     document.getElementById("opponent_cards_left").style.color = "green"
