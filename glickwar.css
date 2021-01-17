@@ -29,14 +29,12 @@ button {
     text-align: center;
 }
 
-#bet_another_card_button {
-    margin-left: 100px;
+#slogan {
+    padding-left: 50px;
 }
 
-#brain_gif {
-    margin-top: 10;
-    position: fixed;
-    left: -2px
+#bet_another_card_button {
+    margin-left: 75px;
 }
 
 #network_gif {
