@@ -73,7 +73,6 @@ async function play_next_hand() {
     if (user_hand.length > 0) {
         _handle_hand_winner()
     }
-    console.log([user_cards_left, opponent_cards_left])
     if (user_cards_left.length === 0 || opponent_cards_left.length === 0) {
         _handle_game_winner()
         return
@@ -168,7 +167,7 @@ function _handle_hand_winner() {
         for (let i = 0; i < opponent_hand.length; i++) {
             user_cards_left.unshift(opponent_hand[i])
         }
-        _announce_user_winnings();
+        _announce_user_winnings()
     } else if (user_last_played_value < opponent_last_played_value) {
         for (let i = 0; i < user_hand.length; i++) {
             opponent_cards_left.unshift(user_hand[i])
@@ -191,7 +190,7 @@ async function _announce_user_winnings() {
     document.getElementById("user_cards_left").innerHTML = `+${opponent_hand.length}`
     document.getElementById("user_cards_left").style.fontSize = "48"
     document.getElementById("user_cards_left").style.color = "green"
-    await _wait_one_second
+    await _wait_one_second()
     document.getElementById("user_cards_left").innerHTML = user_cards_left.length.toString()
     document.getElementById("user_cards_left").style.fontSize = ""
     document.getElementById("user_cards_left").style.color = "black"
@@ -204,7 +203,7 @@ async function _announce_opponent_winnings() {
     await _wait_one_second()
     document.getElementById("opponent_cards_left").innerHTML = opponent_cards_left.length.toString()
     document.getElementById("opponent_cards_left").style.fontSize = ""
-    document.getElementById("opponent_cards_left").style.color = "black"
+    document.getElementById("opponent_cards_left").style.color = ""
 }
 
 function _handle_game_winner() {
