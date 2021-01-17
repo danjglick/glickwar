@@ -1,0 +1,44 @@
+h1 {
+    display: inline;
+    margin-left: 10px;
+    color: black;
+}
+
+img {
+    margin-top: 50px;
+    margin-right: 25px;
+}
+
+button {
+    margin-right: 5px;
+}
+
+.overlay_container {
+    position: relative;
+    color: black;
+    font-weight: bold;
+    margin-left: 5px;
+
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 75px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#bet_another_card_button {
+    margin-left: 100px;
+}
+
+#brain_gif {
+    margin-top: 10;
+    position: fixed;
+    left: -2px
+}
+
+#network_gif {
+    margin-bottom: 90px;
+}

@@ -1,0 +1,41 @@
+<html lang="en">
+    <head>
+        <title> Glickwar </title>
+        <link rel="stylesheet" href="glickwar.css">
+        <script src="glickwar.js"></script>
+    </head>
+    <body>
+        <h1>Glickwar!</h1>
+        <button id="bet_another_card_button" onClick="bet_user_card()" disabled>
+            Bet Another Card
+        </button>
+        <button id="play_next_hand_button" onClick="play_next_hand()" disabled>
+            Play Next Hand
+        </button>
+        <button onClick="start_new_game()">
+            Start New Game
+        </button>
+        <button id="toggle_opponent_ai_button" onClick="toggle_opponent_ai()">
+            Toggle Opponent's AI
+        </button>
+        <div id="user_deck" class="overlay_container">
+            <img src="images/yellow_back.png" alt="Deck of cards" width=150 height="225">
+            <div class="overlay">
+                You have <div id="user_cards_left">0</div> cards left.
+            </div>
+            <span id="user_played_cards"></span>
+        </div>
+        <div class="overlay_container">
+            <img src="images/yellow_back.png" alt="Face-down card" width=150 height="225">
+            <div class="overlay">
+                Opponent has <div id="opponent_cards_left">0</div> cards left.
+                <br/>
+                <img id="brain_gif" src="images/brain.webp" alt="Brain GIF" width=99.75 height=75 hidden>
+            </div>
+            <span id="opponent_played_cards"></span>
+            <img id="network_gif" src="images/network.gif" width=100 height=56.2 hidden>
+        </div>
+        <img id="celebration_gif" src="images/celebration.gif" alt="Celebration GIF" hidden>
+        <img id="embarrassed_gif" src="images/embarrassed.gif" alt="Embarrassed GIF" hidden>
+    </body>
+</html>
